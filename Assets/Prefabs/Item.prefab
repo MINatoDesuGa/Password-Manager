@@ -445,6 +445,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _title: {fileID: 4364714217617159305}
+  _viewButton: {fileID: 2714603698750774296}
+  _editButton: {fileID: 7154962434849455457}
 --- !u!1 &2753523312273529255
 GameObject:
   m_ObjectHideFlags: 0
