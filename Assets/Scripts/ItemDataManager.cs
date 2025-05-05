@@ -1,19 +1,48 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using Newtonsoft.Json;
 public class ItemDataManager : MonoBehaviour {
-    private ItemDataList _itemDataList = new();
+    private string _saveFilePath;
+
+    public static event Action<List<ItemData>> OnItemLoad;
+
+    private List<ItemData> _itemDataList = new();
+//===========================================================================================
+    private void Start() {
+        _saveFilePath = Application.persistentDataPath + "/itemData.json";
+        LoadItemData();
+    }
 
     private void OnEnable() {
-        throw new NotImplementedException();
+        NewItemAddHandler.OnItemAdded += AddItem;
     }
 
     private void OnDisable() {
-        throw new NotImplementedException();
+        NewItemAddHandler.OnItemAdded += AddItem;
     }
-
+//===========================================================================================
     private void AddItem(ItemData itemData) {
-        _itemDataList.ItemDataCollection.Add(itemData);
+        Debug.Log($"add item {itemData.Title}");
+        _itemDataList.Add(itemData);
+        SaveItemData();
+    }
+    private void SaveItemData() {
+       string json = JsonConvert.SerializeObject( _itemDataList, Formatting.Indented );
+      //  string json = JsonUtility.ToJson(_itemDataList, true);
+        File.WriteAllText(_saveFilePath, json);
+        Debug.Log($"saved file to {_saveFilePath}");
+    }
+    private void LoadItemData() {
+        if (File.Exists(_saveFilePath)) {
+            string json = File.ReadAllText(_saveFilePath);
+            _itemDataList = JsonConvert.DeserializeObject<List<ItemData>>(json);
+            //_itemDataList = JsonUtility.FromJson<ItemDataList>(json);
+            OnItemLoad?.Invoke(_itemDataList);
+        } else { 
+            Debug.LogError("save file doesn't exist");  
+        } 
     }
 }
 [System.Serializable]
@@ -26,8 +55,4 @@ public class ItemData {
         Id = id;
         Password = password;
     }
-}
-[System.Serializable]
-public class ItemDataList {
-    public List<ItemData> ItemDataCollection = new();
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using TMPro;
 
 public class NewItemAddHandler : MonoBehaviour
@@ -13,17 +14,40 @@ public class NewItemAddHandler : MonoBehaviour
     [SerializeField] private TMP_InputField titleInputField;
     [SerializeField] private TMP_InputField idInputField;
     [SerializeField] private TMP_InputField passwordInputField;
+//=================================================================================================================
+    private void Awake() {
+        ItemDataManager.OnItemLoad += OnItemLoad;
+        gameObject.SetActive(false);
+    }
+    private void OnDestroy() {
+        ItemDataManager.OnItemLoad -= OnItemLoad;
+    }
 
+    //=================================================================================================================
     public void OnItemAddAction() {
         ValidateInput();
-        ItemData itemData = new(titleInputField.text, idInputField.text, passwordInputField.text);
+        ItemData itemData = SpawnItem();
+        OnItemAdded?.Invoke(itemData);
+    }
+
+    private ItemData SpawnItem(ItemData itemData = null) {
+        if (itemData == null) {
+            itemData = new(titleInputField.text, idInputField.text, passwordInputField.text);    
+        }
+        
         Item item = Instantiate(newItemPrefab, newItemParent).GetComponent<Item>();
         if (item != null) {
             item.Init(itemData);
         }
-        OnItemAdded?.Invoke(itemData);
+        return itemData;
     }
 
+    private void OnItemLoad(List<ItemData> itemDataList) {
+        foreach (var itemData in itemDataList) {
+            Debug.Log($"loading {itemData.Title}");
+            SpawnItem(itemData);
+        }
+    }
     private void ValidateInput() {
         /*
          * TODO: empty field check
