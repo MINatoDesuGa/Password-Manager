@@ -30,7 +30,7 @@ public class ItemDataManager : MonoBehaviour {
     }
     private void SaveItemData() {
        string json = JsonConvert.SerializeObject( _itemDataList, Formatting.Indented );
-      //  string json = JsonUtility.ToJson(_itemDataList, true);
+        /// TODO: Encryption 
         File.WriteAllText(_saveFilePath, json);
         Debug.Log($"saved file to {_saveFilePath}");
     }
@@ -38,7 +38,7 @@ public class ItemDataManager : MonoBehaviour {
         if (File.Exists(_saveFilePath)) {
             string json = File.ReadAllText(_saveFilePath);
             _itemDataList = JsonConvert.DeserializeObject<List<ItemData>>(json);
-            //_itemDataList = JsonUtility.FromJson<ItemDataList>(json);
+            /// TODO: Decryption
             OnItemLoad?.Invoke(_itemDataList);
         } else { 
             Debug.LogError("save file doesn't exist");  
