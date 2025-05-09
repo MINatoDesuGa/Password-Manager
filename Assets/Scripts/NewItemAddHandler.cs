@@ -5,7 +5,7 @@ using TMPro;
 
 public class NewItemAddHandler : MonoBehaviour
 {
-    public static event Action<ItemData> OnItemAdded;
+    public static event Action<string, ItemData> OnItemAdded;
     
     [SerializeField] private GameObject newItemPrefab;
     [SerializeField] private Transform newItemParent;
@@ -25,27 +25,26 @@ public class NewItemAddHandler : MonoBehaviour
 
     //=================================================================================================================
     public void OnItemAddAction() {
-        ValidateInput();
-        ItemData itemData = SpawnItem();
-        OnItemAdded?.Invoke(itemData);
+        ValidateInput(); //TODO: check for empty fields or duplicates
+        ItemData itemData = SpawnItem(titleInputField.text);
+        OnItemAdded?.Invoke(titleInputField.text, itemData);
     }
 
-    private ItemData SpawnItem(ItemData itemData = null) {
+    private ItemData SpawnItem(string itemTitle, ItemData itemData = null) {
         if (itemData == null) {
-            itemData = new(titleInputField.text, idInputField.text, passwordInputField.text);    
+            itemData = new(idInputField.text, passwordInputField.text);    
         }
         
         Item item = Instantiate(newItemPrefab, newItemParent).GetComponent<Item>();
         if (item != null) {
-            item.Init(itemData);
+            item.Init(itemTitle, itemData);
         }
         return itemData;
     }
 
-    private void OnItemLoad(List<ItemData> itemDataList) {
-        foreach (var itemData in itemDataList) {
-            Debug.Log($"loading {itemData.Title}");
-            SpawnItem(itemData);
+    private void OnItemLoad(Dictionary<string, ItemData> itemDataCollection) {
+        foreach (var itemData in itemDataCollection) {
+            SpawnItem(itemData.Key, itemData.Value);
         }
     }
     private void ValidateInput() {

@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5926459769187987052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -324,8 +324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81905fe3bc85068458e7d8727f8da50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offsetDirection: 0
-  OffsetPercent: 83.33
+  _targetScale: 0
+  OffsetPercent: 83.333336
 --- !u!1 &2753523312273529255
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,10 +470,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3658558666142449237}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -60, y: 0}
-  m_SizeDelta: {x: -120, y: 120}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5378479264506389235
 CanvasRenderer:

@@ -15,8 +15,8 @@ public class ItemViewHandler : MonoBehaviour {
         Item.OnItemView -= OnItemView;
     }
 
-    private void OnItemView(ItemData itemData) {
-        _title.text = itemData.Title;
+    private void OnItemView(string itemTitle, ItemData itemData) {
+        _title.text = itemTitle;
         _id.text = itemData.Id;
         _password.text = itemData.Password;
         gameObject.SetActive(true);

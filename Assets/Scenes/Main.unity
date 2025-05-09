@@ -2487,7 +2487,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1237602295}
   m_HandleRect: {fileID: 1237602294}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3890,7 +3890,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 5584510165694236758, guid: 844a57ee5ff01854bab12ba17fc4f853, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4979,7 +4979,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 5584510165694236758, guid: 844a57ee5ff01854bab12ba17fc4f853, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
