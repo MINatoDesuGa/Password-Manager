@@ -1,30 +1,61 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Item : MonoBehaviour {
-    public static event Action<string, ItemData> OnItemView;
-    public static event Action<string, ItemData> OnItemEdit;
+public class Item : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IPointerUpHandler {
+    public static event Action<ItemAction, string, ItemData> OnItemAction;
     
+    private const float ITEM_VIEW_TRIGGER_DELAY = 0.8f;
+
     [SerializeField] private TMP_Text _title;
-    [SerializeField] private Button _viewButton;
-    [SerializeField] private Button _editButton;
-    
+    //TODO: delete item (on swipe left)
+
     private string _itemTitle;
     private ItemData _itemData;
 
-    private void Awake() {
-        _viewButton.onClick.AddListener(() => OnItemView?.Invoke(_itemTitle, _itemData));
-        _editButton.onClick.AddListener(() => OnItemEdit?.Invoke(_itemTitle, _itemData));
-    }
-    private void OnDestroy() {
-        _viewButton.onClick.RemoveAllListeners();
-        _editButton.onClick.RemoveAllListeners();
-    }
+    private bool _canActivateAction = true; // this will be used to not trigger multiple action at once
 
+    private WaitForSeconds _delayDuration;
+    private Coroutine _delayViewCoroutine;
+    //=====================================================================
     public void Init(string itemTitle, ItemData itemData) {
         _itemData = itemData;
         _itemTitle = _title.text = itemTitle;
+
+        _delayDuration = new(ITEM_VIEW_TRIGGER_DELAY);
     }
+    private void ResetCoroutine() {
+        if(_delayViewCoroutine != null) { 
+            StopCoroutine( _delayViewCoroutine );
+            _delayViewCoroutine = null;
+        }
+    }
+    public void OnPointerClick(PointerEventData eventData) {
+        if(!_canActivateAction) { // this means other actions was triggered
+            _canActivateAction = true;
+            return;
+        }
+        OnItemAction?.Invoke(ItemAction.View, _itemTitle, _itemData);
+    }
+    public void OnPointerDown(PointerEventData eventData) {
+        //On hold for specified trigger time, trigger item view
+        ResetCoroutine();
+        _delayViewCoroutine = StartCoroutine(DelayItemViewTrigger());
+
+        IEnumerator DelayItemViewTrigger() {
+            yield return _delayDuration;
+            Debug.Log("Edit item triggered");
+            _canActivateAction = false;
+            OnItemAction?.Invoke(ItemAction.Edit, _itemTitle, _itemData);
+        }
+    }
+    public void OnPointerUp(PointerEventData eventData) {
+        ResetCoroutine(); //on released earler than specified trigger time, reset item view trigger
+    }
+}
+public enum ItemAction {
+    Edit, Delete, View
 }
