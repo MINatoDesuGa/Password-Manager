@@ -51,7 +51,7 @@ public class Item : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IP
     public void OnPointerDown(PointerEventData eventData) {
         //On hold for specified trigger time, trigger item view
         ResetCoroutine();
-        if (_initialItemSize != _targetItemTransform.sizeDelta) {
+        if (_initialItemSize != _targetItemTransform.sizeDelta) { //redone to update after adjusting to content layout
             _initialItemSize = _targetItemTransform.sizeDelta;
             _minDragX = _initialItemSize.x - ITEM_DELETE_TRIGGER_DISTANCE;
         }
